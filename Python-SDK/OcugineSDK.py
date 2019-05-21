@@ -1,9 +1,5 @@
 
-
-class Ocugine():
-    """description of class"""
-
+""" test """
+class Ocugine:
     def Test():
         print("test")
-
-
