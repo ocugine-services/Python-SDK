@@ -368,10 +368,12 @@ class Utils(object):
     #               (def) error - error callback
     #=================================================
     def SendRequest(self, url, data, complete, error): 
-        try: # Try to send request
-            res = requests.post(url, data=data); 
-            complete(res.text);
-        except Exception as ex: # Failed to send request
-            error(traceback.format_exc())      
+        try:                                           # Try to send request
+            response = requests.post(url, data=data);  # Send request
+            if(response.json()['complete']):           # All Right, Server returns Complete Flag
+                complete(response.text);               # Show Complete
+            else:                                      # Server Returns Error
+                error(response.json()['message'])      # Show Error           
+        except Exception as ex:                        # Failed to send request
+            error(traceback.format_exc())              # Show Error         
 
-         

@@ -9,7 +9,7 @@ import webbrowser
 if __name__ == '__main__':
     #web = webbrowser.open('http://google.co.kr', new=2)
 
-    print( lambda x: 'a' if(3<2) else 'b' ) # condition ? consequent : alternative
+    #print( lambda x: 'a' if(3<2) else 'b' ) # condition ? consequent : alternative
 
     SDK = Ocugine(
         Models.SDKSettings.AppSettings(1, 'c46361ae80c1679d637c2f23968a4dc5d5ea2a65'),
