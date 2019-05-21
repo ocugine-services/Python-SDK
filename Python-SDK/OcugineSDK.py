@@ -1,5 +1,7 @@
 import Models.SDKModules as SDKModules
 import Models.SDKSettings as SDKSettings
+import requests
+import traceback
 
 #===================================================
 #  Ocugine SDK
@@ -7,17 +9,17 @@ import Models.SDKSettings as SDKSettings
 #  Ocugine Services. With this library you can
 #  use all features of Ocugine Services
 #
-#  # @name           Ocugine SDK
-#  # @developer      CodeBits Interactive
-#  # @version        0.4.0a
-#  # @build          401
-#  # @url            https:#ocugine.pro/
-#  # @docs           https:#docs.ocugine.pro/
-#  # @license        MIT
+#  @name           Ocugine SDK
+#  @developer      CodeBits Interactive
+#  @version        0.4.0a
+#  @build          401
+#  @url            https:#ocugine.pro/
+#  @docs           https:#docs.ocugine.pro/
+#  @license        MIT
 #===================================================
 class Ocugine(object):
 
-    PROTOCOL = "https:#";       # Requests Protocol
+    PROTOCOL = "https://";       # Requests Protocol
     SERVER = "cp.ocugine.pro";  # Server URL
     SSL = True;                 # SSL
     API_GATE = "/api/";         # API Gateway
@@ -29,21 +31,21 @@ class Ocugine(object):
     settings = None;            # SDK Settings
 
     # Classes Instances
-    auth = None;                                # Authentication Class
-    analytics  = None;                      # Analytics Class
-    game = None;                        # Game Services
-    monetization = None;                    # Monetization Services
-    notifications  = None;              # Notifications Services
-    marketing = None;                      # Marketing Services
-    ads = None;                                  # Ads Services
-    backend = None;                          # Backend Services
-    reports  = None;                        # Reporting Services
-    perfomance  = None;                   # Perfomance Services
-    office  = None;                        # Office Services
-    locale = None;                      # Locale Services
-    users  = None;                              # User Class
-    ui = None;                                    # UI Module
-    utils  = None;                              # Utils Module
+    auth = None;                # Authentication Class
+    analytics  = None;          # Analytics Class
+    game = None;                # Game Services
+    monetization = None;        # Monetization Services
+    notifications  = None;      # Notifications Services
+    marketing = None;           # Marketing Services
+    ads = None;                 # Ads Services
+    backend = None;             # Backend Services
+    reports  = None;            # Reporting Services
+    perfomance  = None;         # Perfomance Services
+    office  = None;             # Office Services
+    locale = None;              # Locale Services
+    users  = None;              # User Class
+    ui = None;                  # UI Module
+    utils  = None;              # Utils Module
 
     # Private Class Params
     STATE_OBJECT = "state";    # State Object
@@ -60,14 +62,12 @@ class Ocugine(object):
         self.settings = sdk_settings;
         Ocugine._initializeModules(self);
     
-    #====================================
-    # @class      General
-    # @method     _initializeModules()
-    # @type       Private
-    # @usage      Initialize SDK modules for usage
-    # @args       none
-    # @returns    none
-    #====================================
+    #=================================================
+    # @class        General
+    # @method       _initializeModules()  
+    # @usage        Initialize modules
+    # @args         (Ocugine) this - SDK instance
+    #=================================================
     def _initializeModules(this):
             if (SDKModules.SDKModules.Auth in this.settings.modules) or (SDKModules.SDKModules.All in this.settings.modules): this.auth = Auth(this); # Create Instance
             if (SDKModules.SDKModules.Analytics in this.settings.modules) or (SDKModules.SDKModules.All in this.settings.modules): analytics = Analytics(this); # Create Instance
@@ -83,262 +83,295 @@ class Ocugine(object):
             if (SDKModules.SDKModules.Localization in this.settings.modules) or ( SDKModules.SDKModules.All in this.settings.modules): this.locale =  Localization(this); # Create Instance
             if (SDKModules.SDKModules.Users in this.settings.modules) or ( SDKModules.SDKModules.All in this.settings.modules): this.users =  Users(this); # Create Instance
             if (SDKModules.SDKModules.UI in this.settings.modules) or (SDKModules.SDKModules.All in this.settings.modules): this.ui =  UI(this); # Create Instance
-            utils =  Utils(this); # Create Instance 
+            this.utils =  Utils(this); # Create Instance 
 
+#================================================
+#  Ocugine Auth Module
+#================================================
 class Auth(object):
 
     # Private Class Params
     _sdk_instance : Ocugine;
 
-    #====================================
-    ## @class      
-    ## @method     __init__   
-    ## @type       Constructor
-    ## @usage      Initialize Module
-    ## @args       none
-    ## @returns     none
-    #====================================
+    #================================================
+    # @class        Auth
+    # @method       __init__  
+    # @usage        Constructor
+    # @args         (Ocugine) instance - SDK instance
+    #================================================
     
     def __init__(self, instance : Ocugine):
         self._sdk_instance = instance
 
+#================================================
+#  Ocugine Analytics Module
+#================================================
 class Analytics(object):
 
     # Private Class Params
     _sdk_instance : Ocugine;
 
-    #====================================
-    # @class      
-    # @method     __init__   
-    # @type       Constructor
-    # @usage      Initialize Module
-    # @args       none
-    # @returns     none
-    #====================================
+    #================================================
+    # @class        Analytics
+    # @method       __init__  
+    # @usage        Constructor
+    # @args         (Ocugine) instance - SDK instance
+    #================================================
     
     def __init__(self, instance : Ocugine):
         self._sdk_instance = instance
  
+#================================================
+#  Ocugine Game Services Module
+#================================================
 class GameServices(object):
 
     # Private Class Params
     _sdk_instance : Ocugine;
 
-    #====================================
-    # @class      
-    # @method     __init__   
-    # @type       Constructor
-    # @usage      Initialize Module
-    # @args       none
-    # @returns     none
-    #====================================
+    #================================================
+    # @class        GameServices
+    # @method       __init__  
+    # @usage        Constructor
+    # @args         (Ocugine) instance - SDK instance
+    #================================================
     
     def __init__(self, instance : Ocugine):
         self._sdk_instance = instance         
     
+#================================================
+#  Ocugine Payments Module
+#================================================
 class Payments(object):
 
     # Private Class Params
     _sdk_instance : Ocugine;
 
-    #====================================
-    # @class      
-    # @method     __init__   
-    # @type       Constructor
-    # @usage      Initialize Module
-    # @args       none
-    # @returns     none
-    #====================================
+    #================================================
+    # @class        Payments
+    # @method       __init__  
+    # @usage        Constructor
+    # @args         (Ocugine) instance - SDK instance
+    #================================================
     
     def __init__(self, instance : Ocugine):
         self._sdk_instance = instance             
-    
+ 
+#================================================
+#  Ocugine Notifications Module
+#================================================        
 class Notifications(object):
 
     # Private Class Params
     _sdk_instance : Ocugine;
 
-    #====================================
-    # @class      
-    # @method     __init__   
-    # @type       Constructor
-    # @usage      Initialize Module
-    # @args       none
-    # @returns     none
-    #====================================
+    #================================================
+    # @class        Notifications
+    # @method       __init__  
+    # @usage        Constructor
+    # @args         (Ocugine) instance - SDK instance
+    #================================================
     
     def __init__(self, instance : Ocugine):
         self._sdk_instance = instance          
  
+#================================================
+#  Ocugine Marketing Module
+#================================================
 class Marketing(object):
 
     # Private Class Params
     _sdk_instance : Ocugine;
 
-    #====================================
-    # @class      
-    # @method     __init__   
-    # @type       Constructor
-    # @usage      Initialize Module
-    # @args       none
-    # @returns     none
-    #====================================
+    #================================================
+    # @class        Marketing
+    # @method       __init__  
+    # @usage        Constructor
+    # @args         (Ocugine) instance - SDK instance
+    #================================================
     
     def __init__(self, instance : Ocugine):
         self._sdk_instance = instance               
-  
+ 
+#================================================
+#  Ocugine Advertisments Module
+#================================================       
 class Ads(object):
 
     # Private Class Params
     _sdk_instance : Ocugine;
 
-    #====================================
-    # @class      
-    # @method     __init__   
-    # @type       Constructor
-    # @usage      Initialize Module
-    # @args       none
-    # @returns     none
-    #====================================
+    #================================================
+    # @class        Ads
+    # @method       __init__  
+    # @usage        Constructor
+    # @args         (Ocugine) instance - SDK instance
+    #================================================
     
     def __init__(self, instance : Ocugine):
         self._sdk_instance = instance                               
- 
+
+#================================================
+#  Ocugine Backend Module
+#================================================ 
 class Backend(object):
 
     # Private Class Params
     _sdk_instance : Ocugine;
 
-    #====================================
-    # @class      
-    # @method     __init__   
-    # @type       Constructor
-    # @usage      Initialize Module
-    # @args       none
-    # @returns     none
-    #====================================
+    #================================================
+    # @class        Backend
+    # @method       __init__  
+    # @usage        Constructor
+    # @args         (Ocugine) instance - SDK instance
+    #================================================
     
     def __init__(self, instance : Ocugine):
         self._sdk_instance = instance       
 
-
+#================================================
+#  Ocugine Reporting Module
+#================================================
 class Reporting(object):
 
     # Private Class Params
     _sdk_instance : Ocugine;
 
-    #====================================
-    # @class      
-    # @method     __init__   
-    # @type       Constructor
-    # @usage      Initialize Module
-    # @args       none
-    # @returns     none
-    #====================================
+    #================================================
+    # @class        Reporting
+    # @method       __init__  
+    # @usage        Constructor
+    # @args         (Ocugine) instance - SDK instance
+    #================================================
     
     def __init__(self, instance : Ocugine):
         self._sdk_instance = instance    
 
 
+#================================================
+#  Ocugine Performance Module
+#================================================
 class Performance(object):
 
     # Private Class Params
     _sdk_instance : Ocugine;
 
-    #====================================
-    # @class      
-    # @method     __init__   
-    # @type       Constructor
-    # @usage      Initialize Module
-    # @args       none
-    # @returns     none
-    #====================================
+    #================================================
+    # @class        Performance
+    # @method       __init__  
+    # @usage        Constructor
+    # @args         (Ocugine) instance - SDK instance
+    #================================================
     
     def __init__(self, instance : Ocugine):
         self._sdk_instance = instance    
 
-
+#================================================
+#  Ocugine Backoffice Module
+#================================================
 class Backoffice(object):
 
     # Private Class Params
     _sdk_instance : Ocugine;
 
-    #====================================
-    # @class      
-    # @method     __init__   
-    # @type       Constructor
-    # @usage      Initialize Module
-    # @args       none
-    # @returns     none
-    #====================================
+    #================================================
+    # @class        Backoffice
+    # @method       __init__  
+    # @usage        Constructor
+    # @args         (Ocugine) instance - SDK instance
+    #================================================
     
     def __init__(self, instance : Ocugine):
         self._sdk_instance = instance    
 
+#================================================
+#  Ocugine Localization Module
+#================================================
 class Localization(object):
 
     # Private Class Params
     _sdk_instance : Ocugine;
 
-    #====================================
-    # @class      
-    # @method     __init__   
-    # @type       Constructor
-    # @usage      Initialize Module
-    # @args       none
-    # @returns     none
-    #====================================
+    #================================================
+    # @class        Localization
+    # @method       __init__  
+    # @usage        Constructor
+    # @args         (Ocugine) instance - SDK instance
+    #================================================
     
     def __init__(self, instance : Ocugine):
         self._sdk_instance = instance    
 
+#================================================
+#  Ocugine Users Module
+#================================================
 class Users(object):
 
     # Private Class Params
     _sdk_instance : Ocugine;
 
-    #====================================
-    # @class      
-    # @method     __init__   
-    # @type       Constructor
-    # @usage      Initialize Module
-    # @args       none
-    # @returns     none
-    #====================================
+    #================================================
+    # @class        Users
+    # @method       __init__  
+    # @usage        Constructor
+    # @args         (Ocugine) instance - SDK instance
+    #================================================
     
     def __init__(self, instance : Ocugine):
         self._sdk_instance = instance    
 
+
+#================================================
+#  Ocugine UI Module
+#================================================
 class UI(object):
 
     # Private Class Params
     _sdk_instance : Ocugine;
 
-    #====================================
-    # @class      
-    # @method     __init__   
-    # @type       Constructor
-    # @usage      Initialize Module
-    # @args       none
-    # @returns     none
-    #====================================
+    #================================================
+    # @class        UI
+    # @method       __init__  
+    # @usage        Constructor
+    # @args         (Ocugine) instance - SDK instance
+    #================================================
     
     def __init__(self, instance : Ocugine):
         self._sdk_instance = instance    
 
+
+#================================================
+#  Ocugine Utils Module
+#================================================
 class Utils(object):
 
     # Private Class Params
     _sdk_instance : Ocugine;
 
-    #====================================
-    # @class      
-    # @method     __init__   
-    # @type       Constructor
-    # @usage      Initialize Module
-    # @args       none
-    # @returns     none
-    #====================================
+    #================================================
+    # @class        Utils
+    # @method       __init__  
+    # @usage        Constructor
+    # @args         (Ocugine) instance - SDK instance
+    #================================================
     
     def __init__(self, instance : Ocugine):
         self._sdk_instance = instance    
+
+    #=================================================
+    # @class        Utils
+    # @method       SendRequest  
+    # @usage        Send POST request
+    # @args         (string) url - request url
+    #               (list) data - json request body
+    #               (def) complete - succsess callback 
+    #               (def) error - error callback
+    #=================================================
+    def SendRequest(self, url, data, complete, error): 
+        try: # Try to send request
+            res = requests.post(url, data=data); 
+            complete(res.text);
+        except Exception as ex: # Failed to send request
+            error(traceback.format_exc())      
+
+         

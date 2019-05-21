@@ -2,10 +2,13 @@
 from OcugineSDK import Ocugine                  # import SDK
 from Models import SDKModules as SDKModules     # import Modules
 import Models                                   # import Object models
+import webbrowser
 #from OcugineSDK import Ads, Analytics
 
 
 if __name__ == '__main__':
+    #web = webbrowser.open('http://google.co.kr', new=2)
+
     print( lambda x: 'a' if(3<2) else 'b' ) # condition ? consequent : alternative
 
     SDK = Ocugine(
@@ -13,7 +16,8 @@ if __name__ == '__main__':
         Models.SDKSettings.SDKSettings("RU", [SDKModules.SDKModules.All], 10)        
     )
 
-    print(SDK.application.app_id)
-    print(SDK.ui)
+    url = SDK.PROTOCOL+SDK.SERVER+SDK.API_GATE+SDK.OAUTH_OBJECT+'/get_link'
+    data = {"app_id": SDK.application.app_id, "app_key": SDK.application.app_key, "grants": "all"}  
 
-    
+    SDK.utils.SendRequest(url, data, lambda suc : print(suc), lambda err : print(err));
+
