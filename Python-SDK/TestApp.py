@@ -48,7 +48,7 @@ if __name__ == '__main__':
         SDK.backend.GetContentList(lambda suc : print(suc), lambda err : print(err));
         SDK.backend.GetContent(2, lambda suc : print(suc), lambda err : print(err));
 
-    if(True): # Тест 
+    if(False): # DownloadContent 
         SDK.ui.DownloadContent(2, '.', lambda suc : print(suc), lambda err : print(err));
 
     if(False): # Тест 
