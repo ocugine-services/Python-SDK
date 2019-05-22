@@ -591,3 +591,24 @@ class Utils(object):
         except Exception as ex:                         # Failed to send request
             error(traceback.format_exc())               # Show Error         
             return False;                               # Return result
+
+    #=================================================
+    # @class        Utils
+    # @method       GetSettings 
+    # @usage        Get settings info
+    # @args         (def) complete - succsess callback 
+    #               (def) error - error callback
+    #=================================================
+    def GetSettings(self, complete, error):  
+        url = self._sdk_instance.PROTOCOL+self._sdk_instance.SERVER+self._sdk_instance.API_GATE+self._sdk_instance.SETTINGS_OBJECT+'/get_settings';
+        data = {
+            "app_id": self._sdk_instance.application.app_id, 
+            "app_key": self._sdk_instance.application.app_key, 
+            "lang": self._sdk_instance.settings.language};  
+        response = {};
+        self._sdk_instance.utils.SendRequest(url, data, lambda suc : response.update(suc), lambda err : error(err));
+        if(response):
+            complete(response);
+            return True;
+        else:
+            return False;

@@ -37,12 +37,12 @@ if __name__ == '__main__':
         SDK.locale.GetLang('ru', lambda suc : print(suc), lambda err : print(err));
         SDK.locale.GetLocale('ru', 'test-node', lambda suc : print(suc), lambda err : print(err));
 
-    if(True): # Тест GetPolicyList GetPolicyInfo
+    if(False): # Тест GetPolicyList GetPolicyInfo
         SDK.users.GetPolicyList(lambda suc : print(suc), lambda err : print(err));
         SDK.users.GetPolicyInfo(2, lambda suc : print(suc), lambda err : print(err));
 
     if(False): # Тест 
-        SDK.utils.SendRequest(url, data, lambda suc : print(suc), lambda err : print(err));
+        SDK.utils.GetSettings(lambda suc : print(suc), lambda err : print(err));
 
     if(False): # Тест 
         SDK.utils.SendRequest(url, data, lambda suc : print(suc), lambda err : print(err));
