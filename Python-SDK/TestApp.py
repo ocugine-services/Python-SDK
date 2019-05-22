@@ -11,7 +11,7 @@ if __name__ == '__main__':
 
     SDK = Ocugine( 
         Models.SDKSettings.AppSettings(1, 'c46361ae80c1679d637c2f23968a4dc5d5ea2a65'),
-        Models.SDKSettings.SDKSettings("RU", [SDKModules.SDKModules.All], 10)        
+        Models.SDKSettings.SDKSettings('RU', [SDKModules.SDKModules.All], 10)        
     )
       
     if(False): # Тест Sendrequest
@@ -27,13 +27,13 @@ if __name__ == '__main__':
     if(False): # Тест GetToken
         SDK.auth.GetToken(lambda suc : print(suc), lambda err : print(err));
 
-    if(False): # Тест Logout
+    if(True): # Тест Logout
         SDK.auth.GetToken(
            lambda suc: SDK.auth.Logout(lambda sucsess : print(sucsess), lambda error : print(error)),
            lambda err : print(err));
 
-    if(False): # Тест Sendrequest
-        SDK.utils.SendRequest(url, data, lambda suc : print(suc), lambda err : print(err));
+    if(True): # Тест GetAuthForm
+        SDK.ui.GetAuthForm('all', lambda suc : print(suc), lambda err : print(err));
 
     if(False): # Тест Sendrequest
         SDK.utils.SendRequest(url, data, lambda suc : print(suc), lambda err : print(err));

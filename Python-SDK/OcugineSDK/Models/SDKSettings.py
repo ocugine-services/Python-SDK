@@ -32,7 +32,7 @@ class SDKSettings(object):
     def __init__(self, _Language, _Modules, _Timeout):
         self.language = _Language;
         self.modules = _Modules;
-        self.timeout = _Timeout;   
+        self.auth_timeout = _Timeout;   
 
 #================================================
 # Ocugine Application Settings Model

@@ -1,8 +1,10 @@
 import OcugineSDK.Models.SDKModules as SDKModules
 import OcugineSDK.Models.SDKSettings as SDKSettings
 import OcugineSDK.Models.AuthentificationModel as AuthentificationModel
+import time
 import requests
 import traceback
+import webbrowser
 
 #===================================================
 #  Ocugine SDK
@@ -80,17 +82,17 @@ class Ocugine(object):
             if (SDKModules.SDKModules.Auth in this.settings.modules) or (SDKModules.SDKModules.All in this.settings.modules): this.auth = Auth(this); # Create Instance
             if (SDKModules.SDKModules.Analytics in this.settings.modules) or (SDKModules.SDKModules.All in this.settings.modules): analytics = Analytics(this); # Create Instance
             if (SDKModules.SDKModules.GameServices in this.settings.modules) or (SDKModules.SDKModules.All in this.settings.modules): this.game = GameServices(this); # Create Instance
-            if (SDKModules.SDKModules.Payments in this.settings.modules) or (SDKModules.SDKModules.All in this.settings.modules): this.monetization =  Payments(this); # Create Instance
-            if (SDKModules.SDKModules.Notifications in this.settings.modules) or (SDKModules.SDKModules.All in this.settings.modules): this.notifications =  Notifications(this); # Create Instance
-            if (SDKModules.SDKModules.Marketing in this.settings.modules) or ( SDKModules.SDKModules.All in this.settings.modules): this.marketing =  Marketing(this); # Create Instance
-            if (SDKModules.SDKModules.Ads in this.settings.modules) or (SDKModules.SDKModules.All in this.settings.modules): this.ads =  Ads(this); # Create Instance
-            if (SDKModules.SDKModules.Backend in this.settings.modules) or (SDKModules.SDKModules.All in this.settings.modules): this.backend =  Backend(this); # Create Instance
-            if (SDKModules.SDKModules.Reporting in this.settings.modules) or (SDKModules.SDKModules.All in this.settings.modules): this.reports =  Reporting(this); # Create Instance
-            if (SDKModules.SDKModules.Perfomance in this.settings.modules) or (SDKModules.SDKModules.All in this.settings.modules): this.performance =  Performance(this); # Create Instance
-            if (SDKModules.SDKModules.Backoffice in this.settings.modules) or (SDKModules.SDKModules.All in this.settings.modules): this.office =  Backoffice(this); # Create Instance
-            if (SDKModules.SDKModules.Localization in this.settings.modules) or ( SDKModules.SDKModules.All in this.settings.modules): this.locale =  Localization(this); # Create Instance
-            if (SDKModules.SDKModules.Users in this.settings.modules) or ( SDKModules.SDKModules.All in this.settings.modules): this.users =  Users(this); # Create Instance
-            if (SDKModules.SDKModules.UI in this.settings.modules) or (SDKModules.SDKModules.All in this.settings.modules): this.ui =  UI(this); # Create Instance
+            if (SDKModules.SDKModules.Payments in this.settings.modules) or (SDKModules.SDKModules.All in this.settings.modules): this.monetization = Payments(this); # Create Instance
+            if (SDKModules.SDKModules.Notifications in this.settings.modules) or (SDKModules.SDKModules.All in this.settings.modules): this.notifications = Notifications(this); # Create Instance
+            if (SDKModules.SDKModules.Marketing in this.settings.modules) or ( SDKModules.SDKModules.All in this.settings.modules): this.marketing = Marketing(this); # Create Instance
+            if (SDKModules.SDKModules.Ads in this.settings.modules) or (SDKModules.SDKModules.All in this.settings.modules): this.ads = Ads(this); # Create Instance
+            if (SDKModules.SDKModules.Backend in this.settings.modules) or (SDKModules.SDKModules.All in this.settings.modules): this.backend = Backend(this); # Create Instance
+            if (SDKModules.SDKModules.Reporting in this.settings.modules) or (SDKModules.SDKModules.All in this.settings.modules): this.reports = Reporting(this); # Create Instance
+            if (SDKModules.SDKModules.Perfomance in this.settings.modules) or (SDKModules.SDKModules.All in this.settings.modules): this.performance = Performance(this); # Create Instance
+            if (SDKModules.SDKModules.Backoffice in this.settings.modules) or (SDKModules.SDKModules.All in this.settings.modules): this.office = Backoffice(this); # Create Instance
+            if (SDKModules.SDKModules.Localization in this.settings.modules) or ( SDKModules.SDKModules.All in this.settings.modules): this.locale = Localization(this); # Create Instance
+            if (SDKModules.SDKModules.Users in this.settings.modules) or ( SDKModules.SDKModules.All in this.settings.modules): this.users = Users(this); # Create Instance
+            if (SDKModules.SDKModules.UI in this.settings.modules) or (SDKModules.SDKModules.All in this.settings.modules): this.ui = UI(this); # Create Instance
             this.utils =  Utils(this); # Create Instance 
 
 #================================================
@@ -408,6 +410,30 @@ class UI(object):
     #================================================   
     def __init__(self, instance : Ocugine):
         self._sdk_instance = instance    
+
+    def GetAuthForm(self, grants, complete, error):
+        if(self._sdk_instance.auth == None):
+            if(self._sdk_instance.settings.language == "RU"): 
+                error("Для использования метода GetAuthForm необходимо подключить модуль Auth");
+            else: 
+                error("Method GetAuthForm requires Auth module");
+            return False
+        else:
+            if(not self._sdk_instance.auth.GetLink(grants, lambda s:webbrowser.open(s['auth_url'], new=2), lambda e: error(e))):
+                return False;
+            else:
+                timeout = 0; GotToken = False; lasterror = {};
+                while (not GotToken and timeout != self._sdk_instance.settings.auth_timeout):
+                    GotToken = self._sdk_instance.auth.GetToken(lambda s: complete(s), lambda e: lasterror.update({'error':e}));
+                    timeout+=1; time.sleep(1);
+                if(GotToken):
+                    return True;
+                else:
+                    if(self._sdk_instance.settings.language == "RU"): 
+                        error("Время на аутентификацию вышло\n" + lasterror['error']);
+                    else: 
+                        error("Authefication timed out\n" + lasterror['error']);
+                    return False;
 
 #================================================
 #  Ocugine Utils Module
