@@ -1,4 +1,3 @@
-from . import SDKModules as Modules
 #===================================================
 #  Ocugine SDK
 #  Sofware Development Kit developed specially for
@@ -18,7 +17,7 @@ from . import SDKModules as Modules
 #================================================
 #  Ocugine SDKs Settings Model
 #================================================
-class SDKSettings():
+class SDKSettings(object):
 
     language = "EN";                            # SDK Language
     modules = None;                             # SDK Modules 
@@ -38,7 +37,7 @@ class SDKSettings():
 #================================================
 # Ocugine Application Settings Model
 #================================================
-class AppSettings():
+class AppSettings(object):
 
     app_id = "";                                # Application ID
     app_key = "";                               # Application Key
@@ -54,8 +53,7 @@ class AppSettings():
     #================================================
     def __init__(self, _AppID, _AppKey):
         self.app_id = _AppID;
-        self.app_key = _AppKey;
-
+        self.app_key = _AppKey;    
 
 
 

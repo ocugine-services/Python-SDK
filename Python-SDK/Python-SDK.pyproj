@@ -21,23 +21,25 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Models\SDKModules.py">
+    <Compile Include="OcugineSDK\Models\SDKModules.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Models\SDKSettings.py">
+    <Compile Include="OcugineSDK\Models\AuthentificationModel.py" />
+    <Compile Include="OcugineSDK\Models\SDKSettings.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Models\__init__.py">
+    <Compile Include="OcugineSDK\Models\__init__.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="OcugineSDK.py">
+    <Compile Include="OcugineSDK\OcugineSDK.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="TestApp.py" />
-    <Compile Include="__init__.py" />
+    <Compile Include="OcugineSDK\__init__.py" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Models\" />
+    <Folder Include="OcugineSDK\Models\" />
+    <Folder Include="OcugineSDK\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in

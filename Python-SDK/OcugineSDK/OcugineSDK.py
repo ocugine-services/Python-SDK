@@ -1,5 +1,6 @@
-import Models.SDKModules as SDKModules
-import Models.SDKSettings as SDKSettings
+import OcugineSDK.Models.SDKModules as SDKModules
+import OcugineSDK.Models.SDKSettings as SDKSettings
+import OcugineSDK.Models.AuthentificationModel as AuthentificationModel
 import requests
 import traceback
 
@@ -100,6 +101,11 @@ class Auth(object):
     # Private Class Params
     _sdk_instance : Ocugine;
 
+    # Authentification Objects
+    credentials = AuthentificationModel.AuthentificationModel();
+    profile = AuthentificationModel.ProfileModel();
+    viewer = AuthentificationModel.ViewerModel();
+
     #================================================
     # @class        Auth
     # @method       __init__  
@@ -107,7 +113,80 @@ class Auth(object):
     # @args         (Ocugine) instance - SDK instance
     #================================================  
     def __init__(self, instance : Ocugine):
-        self._sdk_instance = instance                             
+        self._sdk_instance = instance     
+        
+    #=================================================
+    # @class        Auth
+    # @method       GetLink  
+    # @usage        Gets authentification link
+    # @args         (list[]) grants - grants for application
+    #               (def) complete - succsess callback 
+    #               (def) error - error callback
+    #=================================================
+    def GetLink(self, grants, complete, error):
+        url = self._sdk_instance.PROTOCOL+self._sdk_instance.SERVER+self._sdk_instance.API_GATE+self._sdk_instance.OAUTH_OBJECT+'/get_link';
+        data = {
+            "app_id": self._sdk_instance.application.app_id, 
+            "app_key": self._sdk_instance.application.app_key, 
+            "grants": grants, 
+            "lang": self._sdk_instance.settings.language};  
+        response = {};
+        self._sdk_instance.utils.SendRequest(url, data, lambda suc : response.update(suc), lambda err : error(err));
+        if(response):
+            complete(response);
+            return True;
+        else:
+            return False;
+
+    #=================================================
+    # @class        Auth
+    # @method       GetToken  
+    # @usage        Gets Token
+    # @args         (def) complete - succsess callback 
+    #               (def) error - error callback
+    #=================================================
+    def GetToken(self, complete, error):
+        url = self._sdk_instance.PROTOCOL+self._sdk_instance.SERVER+self._sdk_instance.API_GATE+self._sdk_instance.OAUTH_OBJECT+'/get_token';
+        data = {
+            "app_id": self._sdk_instance.application.app_id, 
+            "app_key": self._sdk_instance.application.app_key, 
+            "lang": self._sdk_instance.settings.language};  
+        response = {};
+        self._sdk_instance.utils.SendRequest(url, data, lambda suc : response.update(suc), lambda err : error(err));
+        if(response):
+            self.credentials.Token = response['access_token'];
+            self.credentials.Is_auth = True;
+            complete(response);
+            return True;
+        else:
+            return False;
+    
+    #=================================================
+    # @class        Auth
+    # @method       GetToken  
+    # @usage        Gets Token
+    # @args         (def) complete - succsess callback 
+    #               (def) error - error callback
+    #=================================================
+    def Logout(self, complete, error):
+        if(self.credentials.Token == "" or self.credentials.Is_auth == False):
+            self.credentials.Token = ""; self.credentials.Is_auth = False;
+            if(self._sdk_instance.settings.language == "RU"): error("Ошибка деавторизации, приложение не авторизовано");
+            else: error("Logout error, application not authorized");
+            return False
+        else:
+            url = self._sdk_instance.PROTOCOL+self._sdk_instance.SERVER+self._sdk_instance.API_GATE+self._sdk_instance.OAUTH_OBJECT+'/logout';
+            data = {
+                "access_token": self.credentials.Token };
+            response = {};
+            self._sdk_instance.utils.SendRequest(url, data, lambda suc : response.update(suc), lambda err : error(err));
+            if(response):
+                self.credentials.Token = ""; 
+                self.credentials.Is_auth = False;
+                complete("Logout succsess");
+                return True;
+            else:
+                return False;
 
 #================================================
 #  Ocugine Advertisments Module
@@ -296,7 +375,6 @@ class Reporting(object):
     def __init__(self, instance : Ocugine):
         self._sdk_instance = instance    
 
-
 #================================================
 #  Ocugine Users Module
 #================================================
@@ -314,7 +392,6 @@ class Users(object):
     def __init__(self, instance : Ocugine):
         self._sdk_instance = instance    
 
-
 #================================================
 #  Ocugine UI Module
 #================================================
@@ -331,7 +408,6 @@ class UI(object):
     #================================================   
     def __init__(self, instance : Ocugine):
         self._sdk_instance = instance    
-
 
 #================================================
 #  Ocugine Utils Module
@@ -361,14 +437,14 @@ class Utils(object):
     #               (def) error - error callback
     #=================================================
     def SendRequest(self, url, data, complete, error): 
-        try:                                           # Try to send request
-            response = requests.post(url, data=data);  # Send request
-            if(response.json()['complete']):           # All Right, Server returns Complete Flag
-                complete(response.text);               # Show Complete
-                return True;                           # Return result
-            else:                                      # Server Returns Error
-                error(response.json()['message'])      # Show Error         
-                return False;                          # Return result
-        except Exception as ex:                        # Failed to send request
-            error(traceback.format_exc())              # Show Error         
-            return False;                              # Return result
+        try:                                            # Try to send request
+            response = requests.post(url, data=data);   # Send request
+            if(response.json()['complete']):            # All Right, Server returns Complete Flag
+                complete(response.json()['data']);      # Show Complete text.replace('\\', '')
+                return True;                            # Return result
+            else:                                       # Server Returns Error
+                error(response.json()['message'])       # Show Error         
+                return False;                           # Return result
+        except Exception as ex:                         # Failed to send request
+            error(traceback.format_exc())               # Show Error         
+            return False;                               # Return result
