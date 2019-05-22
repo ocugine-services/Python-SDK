@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
+#================================================
+#  Ocugine Libraries
+#================================================
 from OcugineSDK.OcugineSDK import Ocugine                  # import SDK
 from OcugineSDK.Models import SDKModules as SDKModules     # import Modules
 from OcugineSDK import Models                              # import Object models
-import webbrowser
 # from OcugineSDK import Ads, Analytics
-# webbrowser.open('http://google.co.kr', new=2)
 
 
 if __name__ == '__main__':
@@ -27,30 +28,31 @@ if __name__ == '__main__':
     if(False): # Тест GetToken
         SDK.auth.GetToken(lambda suc : print(suc), lambda err : print(err));
 
-    if(True): # Тест Logout
+    if(False): # Тест Logout
         SDK.auth.GetToken(
            lambda suc: SDK.auth.Logout(lambda sucsess : print(sucsess), lambda error : print(error)),
            lambda err : print(err));
 
-    if(True): # Тест GetAuthForm
-        SDK.ui.GetAuthForm('all', lambda suc : print(suc), lambda err : print(err));
+    if(True): # Тест GetLang GetLocale
+        SDK.locale.GetLang('ru', lambda suc : print(suc), lambda err : print(err));
+        SDK.locale.GetLocale('ru', 'test-node', lambda suc : print(suc), lambda err : print(err));
 
-    if(False): # Тест Sendrequest
+    if(False): # Тест 
         SDK.utils.SendRequest(url, data, lambda suc : print(suc), lambda err : print(err));
 
-    if(False): # Тест Sendrequest
+    if(False): # Тест 
         SDK.utils.SendRequest(url, data, lambda suc : print(suc), lambda err : print(err));
 
-    if(False): # Тест Sendrequest
+    if(False): # Тест 
         SDK.utils.SendRequest(url, data, lambda suc : print(suc), lambda err : print(err));
 
-    if(False): # Тест Sendrequest
+    if(False): # Тест 
         SDK.utils.SendRequest(url, data, lambda suc : print(suc), lambda err : print(err));
 
-    if(False): # Тест Sendrequest
+    if(False): # Тест 
         SDK.utils.SendRequest(url, data, lambda suc : print(suc), lambda err : print(err));
 
-    if(False): # Тест Sendrequest
+    if(False): # Тест 
         SDK.utils.SendRequest(url, data, lambda suc : print(suc), lambda err : print(err));
 
     

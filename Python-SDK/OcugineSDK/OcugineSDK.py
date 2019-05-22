@@ -1,6 +1,12 @@
+#================================================
+#  Ocugine Libraries
+#================================================
 import OcugineSDK.Models.SDKModules as SDKModules
 import OcugineSDK.Models.SDKSettings as SDKSettings
 import OcugineSDK.Models.AuthentificationModel as AuthentificationModel
+#================================================
+#  Default Libraries
+#================================================
 import time
 import requests
 import traceback
@@ -121,7 +127,7 @@ class Auth(object):
     # @class        Auth
     # @method       GetLink  
     # @usage        Gets authentification link
-    # @args         (list[]) grants - grants for application
+    # @args         (dictionary) grants - permissions
     #               (def) complete - succsess callback 
     #               (def) error - error callback
     #=================================================
@@ -165,8 +171,8 @@ class Auth(object):
     
     #=================================================
     # @class        Auth
-    # @method       GetToken  
-    # @usage        Gets Token
+    # @method       Logout  
+    # @usage        Logout account
     # @args         (def) complete - succsess callback 
     #               (def) error - error callback
     #=================================================
@@ -282,6 +288,8 @@ class Localization(object):
 
     # Private Class Params
     _sdk_instance : Ocugine;
+    _LangInfoCache = {};
+    _LocInfoCache = {};
 
     #================================================
     # @class        Localization
@@ -291,6 +299,63 @@ class Localization(object):
     #================================================    
     def __init__(self, instance : Ocugine):
         self._sdk_instance = instance    
+
+    #=================================================
+    # @class        Localization
+    # @method       GetLang 
+    # @usage        Gets language info
+    # @args         (string) lang_code - Language code 
+    #               (def) complete - succsess callback 
+    #               (def) error - error callback
+    #=================================================
+    def GetLang(self, lang_code, complete, error):
+        if(self._LangInfoCache.get(lang_code, None) != None):
+            complete(self._LangInfoCache[lang_code]);
+            return True;
+        else:
+            url = self._sdk_instance.PROTOCOL+self._sdk_instance.SERVER+self._sdk_instance.API_GATE+self._sdk_instance.LOCALE_OBJECT+'/get_lang';
+            data = {
+                "app_id": self._sdk_instance.application.app_id, 
+                "app_key": self._sdk_instance.application.app_key, 
+                "code": lang_code};  
+            response = {};
+            self._sdk_instance.utils.SendRequest(url, data, lambda suc : response.update(suc), lambda err : error(err));
+            if(response):
+                self._LangInfoCache[lang_code] = response;
+                complete(response);
+                return True;
+            else:
+                return False;
+
+    #=================================================
+    # @class        Localization
+    # @method       GetLocale  
+    # @usage        Gets locale info
+    # @args         (string) lang_code - Language code 
+    #               (def) complete - succsess callback 
+    #               (def) error - error callback
+    #=================================================
+    def GetLocale(self, lang_code, locale_code, complete, error):
+        if(self._LocInfoCache.get(lang_code, None) != None and self._LocInfoCache.get(lang_code, None).get(locale_code, None) != None):
+            complete(self._LocInfoCache[lang_code][locale_code]);
+            return True;
+        else:
+            url = self._sdk_instance.PROTOCOL+self._sdk_instance.SERVER+self._sdk_instance.API_GATE+self._sdk_instance.LOCALE_OBJECT+'/get_locale';
+            data = {
+                "app_id": self._sdk_instance.application.app_id, 
+                "app_key": self._sdk_instance.application.app_key, 
+                "lang": lang_code,
+                "code": locale_code};  
+            response = {};
+            self._sdk_instance.utils.SendRequest(url, data, lambda suc : response.update(suc), lambda err : error(err));
+            if(response):
+                if(self._LocInfoCache.get(lang_code, None) == None):
+                    self._LocInfoCache[lang_code] = {};
+                self._LocInfoCache[lang_code][locale_code] = response;
+                complete(response);
+                return True;
+            else:
+                return False;  
 
 #================================================
 #  Ocugine Marketing Module
@@ -411,6 +476,14 @@ class UI(object):
     def __init__(self, instance : Ocugine):
         self._sdk_instance = instance    
 
+    #================================================
+    # @class        UI
+    # @method       GetAuthForm  
+    # @usage        Get token by Oauth protocol
+    # @args         (dictionary) grants - permissions
+    #               (def) complete - succsess callback 
+    #               (def) error - error callback
+    #================================================
     def GetAuthForm(self, grants, complete, error):
         if(self._sdk_instance.auth == None):
             if(self._sdk_instance.settings.language == "RU"): 
