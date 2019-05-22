@@ -246,7 +246,51 @@ class Backend(object):
     #================================================   
     def __init__(self, instance : Ocugine):
         self._sdk_instance = instance       
- 
+
+    #=================================================
+    # @class        Backend
+    # @method       GetContentList 
+    # @usage        Gets content list
+    # @args         (def) complete - succsess callback 
+    #               (def) error - error callback
+    #=================================================
+    def GetContentList(self, complete, error):  
+        url = self._sdk_instance.PROTOCOL+self._sdk_instance.SERVER+self._sdk_instance.API_GATE+self._sdk_instance.CLOUD_OBJECT+'/get_content_list';
+        data = {
+            "app_id": self._sdk_instance.application.app_id, 
+            "app_key": self._sdk_instance.application.app_key, 
+            "lang": self._sdk_instance.settings.language};  
+        response = {};
+        self._sdk_instance.utils.SendRequest(url, data, lambda suc : response.update(suc), lambda err : error(err));
+        if(response):
+            complete(response);
+            return True;
+        else:
+            return False;
+
+    #=================================================
+    # @class        Users
+    # @method       GetContent
+    # @usage        Gets policy info
+    # @args         (string) cid - content id
+    #               (def) complete - succsess callback 
+    #               (def) error - error callback
+    #=================================================
+    def GetContent(self, cid, complete, error):  
+        url = self._sdk_instance.PROTOCOL+self._sdk_instance.SERVER+self._sdk_instance.API_GATE+self._sdk_instance.CLOUD_OBJECT+'/get_content';
+        data = {
+            "app_id": self._sdk_instance.application.app_id, 
+            "app_key": self._sdk_instance.application.app_key, 
+            "cid": cid, 
+            "lang": self._sdk_instance.settings.language};  
+        response = {};
+        self._sdk_instance.utils.SendRequest(url, data, lambda suc : response.update(suc), lambda err : error(err));
+        if(response):
+            complete(response);
+            return True;
+        else:
+            return False;
+
 #================================================
 #  Ocugine Backoffice Module
 #================================================

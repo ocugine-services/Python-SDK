@@ -15,37 +15,38 @@ if __name__ == '__main__':
         Models.SDKSettings.SDKSettings('RU', [SDKModules.SDKModules.All], 10)        
     )
       
-    if(False): # Тест Sendrequest
+    if(False): # Sendrequest
         url = SDK.PROTOCOL+SDK.SERVER+SDK.API_GATE+SDK.OAUTH_OBJECT+'/get_link'
         data = {"app_id": SDK.application.app_id, "app_key": SDK.application.app_key, "grants": "all"}  
         SDK.utils.SendRequest(url, data, lambda suc : print(suc), lambda err : print(err));
 
-    if(False): # Тест GetLink
+    if(False): # GetLink
         arr = {}
         SDK.auth.GetLink( 'all', lambda suc : arr.update(suc), lambda err : print(err) );
         print(arr)
 
-    if(False): # Тест GetToken
+    if(False): # GetToken
         SDK.auth.GetToken(lambda suc : print(suc), lambda err : print(err));
 
-    if(False): # Тест Logout
+    if(False): # Logout
         SDK.auth.GetToken(
            lambda suc: SDK.auth.Logout(lambda sucsess : print(sucsess), lambda error : print(error)),
            lambda err : print(err));
 
-    if(False): # Тест GetLang GetLocale
+    if(False): # GetLang GetLocale
         SDK.locale.GetLang('ru', lambda suc : print(suc), lambda err : print(err));
         SDK.locale.GetLocale('ru', 'test-node', lambda suc : print(suc), lambda err : print(err));
 
-    if(False): # Тест GetPolicyList GetPolicyInfo
+    if(False): # GetPolicyList GetPolicyInfo
         SDK.users.GetPolicyList(lambda suc : print(suc), lambda err : print(err));
         SDK.users.GetPolicyInfo(2, lambda suc : print(suc), lambda err : print(err));
 
-    if(False): # Тест 
+    if(False): # GetSettings
         SDK.utils.GetSettings(lambda suc : print(suc), lambda err : print(err));
 
-    if(False): # Тест 
-        SDK.utils.SendRequest(url, data, lambda suc : print(suc), lambda err : print(err));
+    if(False): # GetContentList GetContent 
+        SDK.backend.GetContentList(lambda suc : print(suc), lambda err : print(err));
+        SDK.backend.GetContent(2, lambda suc : print(suc), lambda err : print(err));
 
     if(False): # Тест 
         SDK.utils.SendRequest(url, data, lambda suc : print(suc), lambda err : print(err));
