@@ -7,10 +7,8 @@ import OcugineSDK.Models.AuthentificationModel as AuthentificationModel
 #================================================
 #  Default Libraries
 #================================================
-import time
 import requests
 import traceback
-import webbrowser
 
 #===================================================
 #  Ocugine SDK
@@ -580,6 +578,7 @@ class UI(object):
                 error("Method GetAuthForm requires Auth module");
             return False
         else:
+            import webbrowser, time;
             if(not self._sdk_instance.auth.GetLink(grants, lambda s:webbrowser.open(s['auth_url'], new=2), lambda e: error(e))):
                 return False;
             else:
@@ -594,6 +593,46 @@ class UI(object):
                         error("Время на аутентификацию вышло\n" + lasterror['error']);
                     else: 
                         error("Authefication timed out\n" + lasterror['error']);
+                    return False;
+
+    #================================================
+    # @class        UI
+    # @method       DownloadContent  
+    # @usage        Download DLC from cloud
+    # @args         (string) cid - file id
+    #               (string) path - download path
+    #               (def) complete - succsess callback 
+    #               (def) error - error callback
+    #================================================
+    def DownloadContent(self, cid, path, complete, error):
+        if(self._sdk_instance.backend == None):
+            if(self._sdk_instance.settings.language == "RU"): 
+                error("Для использования метода DownloadContent необходимо подключить модуль Backend");
+            else: 
+                error("Method DownloadContent requires Auth Backend");
+            return False
+        else:
+            response = {}; 
+            if(not self._sdk_instance.backend.GetContent(cid, lambda s: response.update(s['info']), lambda e: error(e))):
+                return False;
+            else:         
+                filepath = path.strip('/')+'/'+response['content_slug'];
+                import os, urllib.request, urllib.parse, urllib.error;
+                if(not os.path.exists(filepath) or os.path.getsize(filepath) != float(response['content_size'])):                  
+                    try:
+                        opener = urllib.request.build_opener();
+                        opener.addheaders = [('User-agent', 'Mozilla/5.0')];
+                        urllib.request.install_opener(opener);
+                        urllib.request.urlretrieve(response['content_url'], filepath);
+                        complete(filepath);
+                    except Exception as ex:                        
+                        error(traceback.format_exc())                  
+                        return False; 
+                else:
+                    if(self._sdk_instance.settings.language == "RU"): 
+                        error("Файл уже существует");
+                    else: 
+                        error("File already exists");
                     return False;
 
 #================================================
