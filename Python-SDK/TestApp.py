@@ -33,12 +33,13 @@ if __name__ == '__main__':
            lambda suc: SDK.auth.Logout(lambda sucsess : print(sucsess), lambda error : print(error)),
            lambda err : print(err));
 
-    if(True): # Тест GetLang GetLocale
+    if(False): # Тест GetLang GetLocale
         SDK.locale.GetLang('ru', lambda suc : print(suc), lambda err : print(err));
         SDK.locale.GetLocale('ru', 'test-node', lambda suc : print(suc), lambda err : print(err));
 
-    if(False): # Тест 
-        SDK.utils.SendRequest(url, data, lambda suc : print(suc), lambda err : print(err));
+    if(True): # Тест GetPolicyList GetPolicyInfo
+        SDK.users.GetPolicyList(lambda suc : print(suc), lambda err : print(err));
+        SDK.users.GetPolicyInfo(2, lambda suc : print(suc), lambda err : print(err));
 
     if(False): # Тест 
         SDK.utils.SendRequest(url, data, lambda suc : print(suc), lambda err : print(err));

@@ -459,6 +459,50 @@ class Users(object):
     def __init__(self, instance : Ocugine):
         self._sdk_instance = instance    
 
+    #=================================================
+    # @class        Users
+    # @method       GetPolicyList 
+    # @usage        Gets policy info
+    # @args         (def) complete - succsess callback 
+    #               (def) error - error callback
+    #=================================================
+    def GetPolicyList(self, complete, error):  
+        url = self._sdk_instance.PROTOCOL+self._sdk_instance.SERVER+self._sdk_instance.API_GATE+self._sdk_instance.USERS_OBJECT+'/get_policy_list';
+        data = {
+            "app_id": self._sdk_instance.application.app_id, 
+            "app_key": self._sdk_instance.application.app_key, 
+            "lang": self._sdk_instance.settings.language};  
+        response = {};
+        self._sdk_instance.utils.SendRequest(url, data, lambda suc : response.update(suc), lambda err : error(err));
+        if(response):
+            complete(response);
+            return True;
+        else:
+            return False;
+
+    #=================================================
+    # @class        Users
+    # @method       GetPolicyInfo
+    # @usage        Gets policy info
+    # @args         (string) pid - policy id
+    #               (def) complete - succsess callback 
+    #               (def) error - error callback
+    #=================================================
+    def GetPolicyInfo(self, pid, complete, error):  
+        url = self._sdk_instance.PROTOCOL+self._sdk_instance.SERVER+self._sdk_instance.API_GATE+self._sdk_instance.USERS_OBJECT+'/get_policy_info';
+        data = {
+            "app_id": self._sdk_instance.application.app_id, 
+            "app_key": self._sdk_instance.application.app_key, 
+            "pid": pid, 
+            "lang": self._sdk_instance.settings.language};  
+        response = {};
+        self._sdk_instance.utils.SendRequest(url, data, lambda suc : response.update(suc), lambda err : error(err));
+        if(response):
+            complete(response);
+            return True;
+        else:
+            return False;
+
 #================================================
 #  Ocugine UI Module
 #================================================
