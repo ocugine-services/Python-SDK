@@ -51,8 +51,13 @@ if __name__ == '__main__':
     if(False): # DownloadContent 
         SDK.ui.DownloadContent(2, '.', lambda suc : print(suc), lambda err : print(err));
 
-    if(False): # Тест 
-        SDK.utils.SendRequest(url, data, lambda suc : print(suc), lambda err : print(err));
+    if(True): # Информация о пользователях 
+        SDK.users.GetUsersList(1, lambda suc : print(suc), lambda err : print(err));
+        SDK.users.FindUser('Ocugine', 1, lambda suc : print(suc), lambda err : print(err));
+        SDK.users.GetUserByID(17, lambda suc : print(suc), lambda err : print(err));
+        SDK.auth.GetToken(
+           lambda suc: SDK.users.GetUserData(lambda suc : print(suc), lambda err : print(err)),
+           lambda err : print(err));       
 
     if(False): # Тест 
         SDK.utils.SendRequest(url, data, lambda suc : print(suc), lambda err : print(err));

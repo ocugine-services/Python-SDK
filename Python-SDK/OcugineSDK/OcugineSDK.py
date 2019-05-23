@@ -503,6 +503,99 @@ class Users(object):
 
     #=================================================
     # @class        Users
+    # @method       GetUsersList 
+    # @usage        Gets users list
+    # @args         (int) page - Page number    
+    #               (def) complete - Complete Callback
+    #               (def) error - Error Callback
+    #=================================================
+    def GetUsersList(self, page, complete, error):  
+        url = self._sdk_instance.PROTOCOL+self._sdk_instance.SERVER+self._sdk_instance.API_GATE+self._sdk_instance.USERS_OBJECT+'/get_users_list';
+        data = {
+            "app_id": self._sdk_instance.application.app_id, 
+            "app_key": self._sdk_instance.application.app_key, 
+            "lang": self._sdk_instance.settings.language,
+            "page": page};  
+        response = {};
+        self._sdk_instance.utils.SendRequest(url, data, lambda suc : response.update(suc), lambda err : error(err));
+        if(response):
+            complete(response);
+            return True;
+        else:
+            return False;
+
+    #=================================================
+    # @class        Users
+    # @method       FindUser 
+    # @usage        Find user by name and surname 
+    # @args         (string) search - Search request  
+    #               (int) page - Search page  
+    #               (def) complete - Complete Callback
+    #               (def) error - Error Callback
+    #=================================================
+    def FindUser(self, search, page, complete, error):  
+        url = self._sdk_instance.PROTOCOL+self._sdk_instance.SERVER+self._sdk_instance.API_GATE+self._sdk_instance.USERS_OBJECT+'/find_user';
+        data = {
+            "app_id": self._sdk_instance.application.app_id, 
+            "app_key": self._sdk_instance.application.app_key, 
+            "lang": self._sdk_instance.settings.language,
+            "search": search,
+            "page": page};  
+        response = {};
+        self._sdk_instance.utils.SendRequest(url, data, lambda suc : response.update(suc), lambda err : error(err));
+        if(response):
+            complete(response);
+            return True;
+        else:
+            return False;
+
+    #=================================================
+    # @class        Users
+    # @method       GetUserData 
+    # @usage        Gets current user info
+    # @args         (def) complete - Complete Callback
+    #               (def) error - Error Callback
+    #=================================================
+    def GetUserData(self, complete, error):  
+        url = self._sdk_instance.PROTOCOL+self._sdk_instance.SERVER+self._sdk_instance.API_GATE+self._sdk_instance.USERS_OBJECT+'/get_user_data';
+        data = {
+            "app_id": self._sdk_instance.application.app_id, 
+            "app_key": self._sdk_instance.application.app_key, 
+            "lang": self._sdk_instance.settings.language,
+            "access_token": self._sdk_instance.auth.credentials.Token};  
+        response = {};
+        self._sdk_instance.utils.SendRequest(url, data, lambda suc : response.update(suc), lambda err : error(err));
+        if(response):
+            complete(response);
+            return True;
+        else:
+            return False;
+    
+    #=================================================
+    # @class        Users
+    # @method       GetUserByID 
+    # @usage        Find user by ID
+    # @args         (double) uid - User ID 
+    #               (def) complete - Complete Callback
+    #               (def) error - Error Callback
+    #=================================================
+    def GetUserByID(self, uid, complete, error):  
+        url = self._sdk_instance.PROTOCOL+self._sdk_instance.SERVER+self._sdk_instance.API_GATE+self._sdk_instance.USERS_OBJECT+'/get_user_by_id';
+        data = {
+            "app_id": self._sdk_instance.application.app_id, 
+            "app_key": self._sdk_instance.application.app_key, 
+            "lang": self._sdk_instance.settings.language,
+            "profile_uid": uid};  
+        response = {};
+        self._sdk_instance.utils.SendRequest(url, data, lambda suc : response.update(suc), lambda err : error(err));
+        if(response):
+            complete(response);
+            return True;
+        else:
+            return False;
+
+    #=================================================
+    # @class        Users
     # @method       GetPolicyList 
     # @usage        Gets policy info
     # @args         (def) complete - succsess callback 
