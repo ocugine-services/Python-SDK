@@ -11,10 +11,14 @@ from OcugineSDK import Models                              # import Object model
 if __name__ == '__main__':
 
     SDK = Ocugine( 
-        Models.SDKSettings.AppSettings(1, 'c46361ae80c1679d637c2f23968a4dc5d5ea2a65'),
+        Models.SDKSettings.AppSettings(41, '9e7ef73643555be6e9cc38295e0ea5d4dcd21d10'),
         Models.SDKSettings.SDKSettings('RU', [SDKModules.SDKModules.All], 10)        
     )
       
+    if(False): # Информация об апи 
+        SDK.getAPIInfo(lambda suc : print(suc), lambda err : print(err));
+        SDK.getAPIState(lambda suc : print(suc), lambda err : print(err));
+
     if(False): # Sendrequest
         url = SDK.PROTOCOL+SDK.SERVER+SDK.API_GATE+SDK.OAUTH_OBJECT+'/get_link'
         data = {"app_id": SDK.application.app_id, "app_key": SDK.application.app_key, "grants": "all"}  
@@ -51,15 +55,21 @@ if __name__ == '__main__':
     if(False): # DownloadContent 
         SDK.ui.DownloadContent(2, '.', lambda suc : print(suc), lambda err : print(err));
 
-    if(True): # Информация о пользователях 
+    if(False): # Информация о пользователях 
         SDK.users.GetUsersList(1, lambda suc : print(suc), lambda err : print(err));
         SDK.users.FindUser('Ocugine', 1, lambda suc : print(suc), lambda err : print(err));
         SDK.users.GetUserByID(17, lambda suc : print(suc), lambda err : print(err));
         SDK.auth.GetToken(
            lambda suc: SDK.users.GetUserData(lambda suc : print(suc), lambda err : print(err)),
-           lambda err : print(err));       
+           lambda err : print(err));           
 
-    if(False): # Тест 
-        SDK.utils.SendRequest(url, data, lambda suc : print(suc), lambda err : print(err));
+    if(False): # Списки локалей и языков
+        SDK.locale.GetLangList(lambda suc : print(suc), lambda err : print(err));
+        SDK.locale.GetLocaleList(lambda suc : print(suc), lambda err : print(err));
+
+    if(False): # GetGroupList GetGroupData
+        SDK.users.GetGroupList(lambda suc : print(suc), lambda err : print(err));
+        SDK.users.GetGroupData(-1, lambda suc : print(suc), lambda err : print(err));
+    
 
     

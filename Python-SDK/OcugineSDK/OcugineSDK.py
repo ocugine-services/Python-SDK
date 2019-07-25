@@ -75,6 +75,42 @@ class Ocugine(object):
         self.application = app_settings;
         self.settings = sdk_settings;
         Ocugine._initializeModules(self);
+
+    #=================================================
+    # @class        General
+    # @method       getAPIInfo 
+    # @usage        Get api info
+    # @args         (def) complete - succsess callback 
+    #               (def) error - error callback 
+    #=================================================
+    def getAPIInfo(self, complete, error):  
+        url = self.PROTOCOL+self.SERVER+self.API_GATE+self.STATE_OBJECT+'/';
+        data = { "lang": self.settings.language};  
+        response = {};
+        self.utils.SendRequest(url, data, lambda suc : response.update(suc), lambda err : error(err));
+        if(response):
+            complete(response);
+            return True;
+        else:
+            return False;
+
+    #=================================================
+    # @class        General
+    # @method       getAPIStatus
+    # @usage        Get api state
+    # @args         (def) complete - succsess callback 
+    #               (def) error - error callback 
+    #=================================================
+    def getAPIState(self, complete, error):  
+        url = self.PROTOCOL+self.SERVER+self.API_GATE+self.STATE_OBJECT+'/';
+        data = { "lang": self.settings.language};  
+        response = {};
+        self.utils.SendRequest(url, data, lambda suc : response.update(suc), lambda err : error(err));
+        if(response):
+            complete(response);
+            return True;
+        else:
+            return False;
     
     #=================================================
     # @class        General
@@ -332,6 +368,8 @@ class Localization(object):
     _sdk_instance : Ocugine;
     _LangInfoCache = {};
     _LocInfoCache = {};
+    _LangListCache = {};
+    _LocListCache = {};
 
     #================================================
     # @class        Localization
@@ -371,6 +409,31 @@ class Localization(object):
 
     #=================================================
     # @class        Localization
+    # @method       GetLangList
+    # @usage        Gets language list
+    # @args         (def) complete - succsess callback 
+    #               (def) error - error callback
+    #=================================================
+    def GetLangList(self, complete, error):
+        if(self._LangInfoCache != {}):
+            complete(self._LangListCache);
+            return True;
+        else:
+            url = self._sdk_instance.PROTOCOL+self._sdk_instance.SERVER+self._sdk_instance.API_GATE+self._sdk_instance.LOCALE_OBJECT+'/get_lang_list';
+            data = {
+                "app_id": self._sdk_instance.application.app_id, 
+                "app_key": self._sdk_instance.application.app_key};  
+            response = {};
+            self._sdk_instance.utils.SendRequest(url, data, lambda suc : response.update(suc), lambda err : error(err));
+            if(response):
+                self._LangListCache = response;
+                complete(response);
+                return True;
+            else:
+                return False;
+
+    #=================================================
+    # @class        Localization
     # @method       GetLocale  
     # @usage        Gets locale info
     # @args         (string) lang_code - Language code 
@@ -398,6 +461,31 @@ class Localization(object):
                 return True;
             else:
                 return False;  
+    
+    #=================================================
+    # @class        Localization
+    # @method       GetLocaleList
+    # @usage        Gets locale list
+    # @args         (def) complete - succsess callback 
+    #               (def) error - error callback
+    #=================================================
+    def GetLocaleList(self, complete, error):
+        if(self._LocListCache != {}):
+            complete(self._LocListCache);
+            return True;
+        else:
+            url = self._sdk_instance.PROTOCOL+self._sdk_instance.SERVER+self._sdk_instance.API_GATE+self._sdk_instance.LOCALE_OBJECT+'/get_locale_list';
+            data = {
+                "app_id": self._sdk_instance.application.app_id, 
+                "app_key": self._sdk_instance.application.app_key};  
+            response = {};
+            self._sdk_instance.utils.SendRequest(url, data, lambda suc : response.update(suc), lambda err : error(err));
+            if(response):
+                self._LocListCache = response;
+                complete(response);
+                return True;
+            else:
+                return False;
 
 #================================================
 #  Ocugine Marketing Module
@@ -637,6 +725,50 @@ class Users(object):
             return True;
         else:
             return False;
+
+    #=================================================
+    # @class        Users
+    # @method       GetGroupData
+    # @usage        Gets groups data
+    # @args         (double) group_id - group_id 
+    #               (def) complete - succsess callback 
+    #               (def) error - error callback
+    #=================================================
+    def GetGroupData(self, group_id, complete, error):
+        url = self._sdk_instance.PROTOCOL+self._sdk_instance.SERVER+self._sdk_instance.API_GATE+self._sdk_instance.USERS_OBJECT+'/get_group_data';
+        data = {
+                "app_id": self._sdk_instance.application.app_id, 
+                "app_key": self._sdk_instance.application.app_key,
+                "group_id": group_id 
+               };  
+        response = {};
+        self._sdk_instance.utils.SendRequest(url, data, lambda suc : response.update(suc), lambda err : error(err));
+        if(response):
+             complete(response);
+             return True;
+        else:
+             return False;  
+    
+    #=================================================
+    # @class        Users
+    # @method       GetGroupList
+    # @usage        Gets groups list
+    # @args         (def) complete - succsess callback 
+    #               (def) error - error callback
+    #=================================================
+    def GetGroupList(self, complete, error):
+        url = self._sdk_instance.PROTOCOL+self._sdk_instance.SERVER+self._sdk_instance.API_GATE+self._sdk_instance.USERS_OBJECT+'/get_group_list';
+        data = {
+                "app_id": self._sdk_instance.application.app_id, 
+                "app_key": self._sdk_instance.application.app_key
+               };  
+        response = {};
+        self._sdk_instance.utils.SendRequest(url, data, lambda suc : response.update(suc), lambda err : error(err));
+        if(response):
+             complete(response);
+             return True;
+        else:
+             return False;                    
 
 #================================================
 #  Ocugine UI Module
